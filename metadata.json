@@ -1,0 +1,7 @@
+{
+  "name": "Saqqr CRM BASEM السيد&",
+  "description": "A modern, web-based CRM system designed as a central operations hub for a digital marketing and programming company. It focuses on unifying the client journey from lead generation to project completion and financial management.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
+}

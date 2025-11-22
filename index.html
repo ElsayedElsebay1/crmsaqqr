@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="saqqr-cyan">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="https://l.top4top.io/p_356010hdb1.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saqqr CRM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --color-primary: #00B7C1;
+        --color-primary-hover: #00A3AD;
+        --color-primary-light: #5BE1E8;
+        --color-bg-base: #0D1C3C;
+        --color-bg-elevated: #1A2B4D;
+        --color-bg-muted: #2C3E5F;
+        --color-border: #3E527B;
+        --color-text-primary: #ffffff;
+        --color-text-secondary: #e2e8f0;
+        --color-text-muted: #94a3b8; /* slate-400 */
+        --color-danger: #dc2626; /* red-600 */
+        --color-danger-hover: #b91c1c; /* red-700 */
+      }
+
+      [data-theme="crimson-red"] {
+        --color-primary: #dc2626;
+        --color-primary-hover: #b91c1c;
+        --color-primary-light: #f87171;
+      }
+      [data-theme="emerald-green"] {
+        --color-primary: #10b981;
+        --color-primary-hover: #059669;
+        --color-primary-light: #6ee7b7;
+      }
+      [data-theme="royal-blue"] {
+        --color-primary: #3b82f6;
+        --color-primary-hover: #2563eb;
+        --color-primary-light: #93c5fd;
+      }
+
+      body {
+        font-family: 'Cairo', sans-serif;
+        background-color: var(--color-bg-base);
+        background-image: radial-gradient(circle at 1px 1px, var(--color-bg-elevated) 1px, transparent 0);
+        background-size: 20px 20px;
+        color: var(--color-text-secondary);
+      }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      .animate-spin-slow {
+        animation: spin 3s linear infinite;
+      }
+      /* Styles for dashboard widget drag-and-drop */
+      .widget-container {
+        position: relative; /* Added for placeholder */
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+      }
+      .dragging-widget {
+        opacity: 0.9;
+        transform: scale(1.04) rotate(2deg);
+        box-shadow: 0 15px 25px rgba(0, 0, 0, 0.25), 0 8px 10px rgba(0, 0, 0, 0.22);
+        border-color: var(--color-primary) !important; /* Use important to override overdue-deal border */
+        cursor: grabbing !important;
+      }
+      .drag-over-widget::before {
+        content: '';
+        position: absolute;
+        top: -4px;
+        left: 0;
+        right: 0;
+        height: 6px;
+        border-radius: 3px;
+        background-color: var(--color-primary);
+        box-shadow: 0 0 8px var(--color-primary);
+      }
+       /* Modal animation */
+      @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+      }
+      @keyframes scaleIn {
+          from { transform: scale(0.95); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+      }
+      .modal-backdrop {
+          animation: fadeIn 0.2s ease-out forwards;
+      }
+      .modal-content {
+          animation: scaleIn 0.2s ease-out forwards;
+      }
+
+      /* Page transition animation */
+      @keyframes pageFadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
+      .page-container {
+        animation: pageFadeIn 0.4s ease-out;
+      }
+
+      /* Custom gradient text */
+      .gradient-text {
+          background: linear-gradient(to right, var(--color-primary), var(--color-primary-light));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          text-fill-color: transparent;
+      }
+
+      /* Standardized Button System */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem; /* 8px */
+        padding: 0.5rem 1rem; /* 8px 16px */
+        font-weight: 600;
+        border-radius: 0.5rem; /* 8px */
+        transition-property: color, background-color, border-color, opacity, box-shadow, transform;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+        box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        border: 1px solid transparent;
+      }
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .btn-primary {
+        background-color: var(--color-primary);
+        color: var(--color-text-primary);
+        border-color: var(--color-primary);
+      }
+      .btn-primary:hover:not(:disabled) {
+        background-color: var(--color-primary-hover);
+        border-color: var(--color-primary-hover);
+      }
+      .btn-secondary {
+        background-color: var(--color-bg-muted);
+        color: var(--color-text-secondary);
+        border-color: var(--color-border);
+      }
+      .btn-secondary:hover:not(:disabled) {
+        background-color: var(--color-bg-elevated);
+        border-color: var(--color-bg-muted);
+      }
+      .btn-danger {
+        background-color: var(--color-danger);
+        color: var(--color-text-primary);
+        border-color: var(--color-danger);
+      }
+      .btn-danger:hover:not(:disabled) {
+        background-color: var(--color-danger-hover);
+        border-color: var(--color-danger-hover);
+      }
+      /* Style for overdue deals on Kanban board */
+      .overdue-deal {
+        border-color: #ef4444 !important; /* red-500 */
+        box-shadow: 0 0 10px 2px rgba(239, 68, 68, 0.4);
+        background-color: rgba(159, 18, 57, 0.1); /* rose-900 with alpha */
+      }
+      .overdue-deal:hover {
+        border-color: #f87171 !important; /* red-400 */
+        box-shadow: 0 0 15px 3px rgba(239, 68, 68, 0.5);
+        transform: translateY(-2px);
+      }
+       /* Style for upcoming meeting deals on Kanban board */
+      .upcoming-meeting-deal {
+        border-color: #fb923c !important; /* orange-400 */
+        box-shadow: 0 0 10px 2px rgba(251, 146, 60, 0.4);
+        background-color: rgba(124, 45, 18, 0.1); /* orange-900 with alpha */
+      }
+      .upcoming-meeting-deal:hover {
+        border-color: #fdba74 !important; /* orange-300 */
+        box-shadow: 0 0 15px 3px rgba(251, 146, 60, 0.5);
+        transform: translateY(-2px);
+      }
+      /* Style for stale leads in table */
+      .stale-lead {
+        background-color: rgba(159, 18, 57, 0.08); /* rose-900 with alpha */
+      }
+      /* Loader animations */
+      @keyframes shimmer {
+        0% { background-position: -1000px 0; }
+        100% { background-position: 1000px 0; }
+      }
+      .loader-shimmer {
+        animation: shimmer 2.5s infinite linear;
+        background: linear-gradient(to right, var(--color-bg-base) 4%, var(--color-bg-elevated) 25%, var(--color-bg-base) 36%);
+        background-size: 1000px 100%;
+      }
+      @keyframes loader-bar {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+      }
+      .animate-loader-bar {
+        animation: loader-bar 1.5s infinite ease-in-out;
+      }
+      .ltr-text {
+        direction: ltr;
+        text-align: left;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "recharts": "https://aistudiocdn.com/recharts@^2.12.7",
+    "recharts/": "https://aistudiocdn.com/recharts@^2.12.7/",
+    "jspdf": "https://aistudiocdn.com/jspdf@^2.5.1",
+    "jspdf-autotable": "https://aistudiocdn.com/jspdf-autotable@^3.8.2",
+    "zustand": "https://aistudiocdn.com/zustand@^4.5.4",
+    "zustand/": "https://aistudiocdn.com/zustand@^4.5.4/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.25.0"
+  }
+}
+</script>
+</head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/index.tsx"></script>
+  </body>
+</html>
